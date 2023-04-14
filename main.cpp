@@ -1,5 +1,7 @@
 #include "knight2.h"
 
+unsigned knidcount = 0;
+
 int main(int argc, char ** argv) {
     string file_armyknights, file_events;
     if (argc == 1) {
@@ -16,12 +18,13 @@ int main(int argc, char ** argv) {
     }
     
     // BEBGIN
-    KnightAdventure * knightAdventure = new KnightAdventure();
-    knightAdventure->loadArmyKnights(file_armyknights);
-    knightAdventure->loadEvents(file_events);
-    knightAdventure->run();
-
-    delete knightAdventure;
+    // Don't alloc to heap if ya don't need to;
+    KnightAdventure knightAdventure{};
+    knightAdventure.loadArmyKnights(file_armyknights);
+    std::cout << "okay2" << std::endl;
+    knightAdventure.loadEvents(file_events);
+    std::cout << "okay3" << std::endl;
+    knightAdventure.run();
 
     return 0;
 }

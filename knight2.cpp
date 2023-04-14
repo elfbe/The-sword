@@ -24,7 +24,30 @@ string BaseKnight::toString() const
 /* * * BEGIN implementation of class ArmyKnights * * */
     ArmyKnights::ArmyKnights(const string & file_armyknights)
     {
-        
+        knights.clear();
+        std::fstream file(file_armyknights, std::ios::in);
+        std::string str;
+        std::getline(file, str);
+        std::size_t num = 0;
+        for(char ch : str){
+            num *= 10;
+            num += (ch - '0');
+        }
+        while(num--){
+            std::getline(file, str);
+            unsigned data[5] = {0, 0, 0, 0, 0};
+            unsigned* cur = data;
+            for(char ch : str){
+                if(ch == ' ') {
+                    ++cur;
+                    continue;
+                }
+                (*cur) *= 10;
+                (*cur) += (ch - '0');
+            }
+            knights.push_back(BaseKnight(data[0], data[1], data[2], data[3], data[4]));
+        }
+        file.close();
     }
 
     int ArmyKnights::count() const
@@ -54,11 +77,17 @@ string BaseKnight::toString() const
 
 void ArmyKnights::printInfo() const 
 {
-    cout << "No. knights: " << this->count();
-    if (this->count() > 0) 
+    cout << "No. knights: " << knights.length();
+    if (!knights.empty()) 
     {
-        BaseKnight * lknight = lastKnight(); // last knight
-        cout << ";" << lknight->toString();
+        for(const BaseKnight& kn : knights){
+            std::cout << "Knight:\n\tHP:\t" << kn.hp
+                << "\n\tLEVEL:\t" << kn.maxhp
+                << "\n\tPhenonixDownL:\t" << kn.level
+                << "\n\tGil:\t" << kn.gil
+                << "\n\tAntidote:\t" << kn.antidote
+                << '\n';
+        }
     }
     cout << ";PaladinShield:" << this->hasPaladinShield()
         << ";LancelotSpear:" << this->hasLancelotSpear()
@@ -85,23 +114,7 @@ KnightAdventure::~KnightAdventure()
 }
 void KnightAdventure::loadArmyKnights(const string & file_armyknights)
 {
-    ifstream (knights);
-    int numKnights;
-    knights.open(file_armyknights,ios::in);
-    knights >> numKnights;
-    knights.ignore();
-    
-    string* knightinfo = new string[numKnights];
-    for(int i = 0; i < numKnights; i++)
-    {
-        getline(knights,knightinfo[i]);
-        stringstream ss(knightinfo[i]);
-        int HP, level, phoenixdownI, gil, antidote;
-        ss >> HP >> level >> phoenixdownI >> gil >> antidote;
-        BaseKnight::create(1, HP, level, gil, antidote, phoenixdownI);
-
-    }
-    knights.close();
+    armyKnights = new ArmyKnights(file_armyknights);
 }
 void KnightAdventure::loadEvents(const string &)
 {
@@ -109,7 +122,8 @@ void KnightAdventure::loadEvents(const string &)
 }
 void KnightAdventure::run()
 {
-    // armyKnights->printInfo();
+    armyKnights->printInfo();
+    std::cout << "okay" << std::endl;
 }
 
 /* * * END implementation of class KnightAdventure * * */
