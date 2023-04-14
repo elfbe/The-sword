@@ -4,6 +4,7 @@
 #include "main.h"
 
 // #define DEBUG
+extern unsigned knidcount;
 
 enum ItemType {/* TODO: */};
 
@@ -19,7 +20,7 @@ class BaseOpponent;
 
 enum KnightType { PALADIN = 0, LANCELOT, DRAGON, NORMAL };
 class BaseKnight {
-protected:
+public:
     int id;
     int hp;
     int maxhp;
@@ -28,14 +29,15 @@ protected:
     int antidote;
     BaseBag * bag;
     KnightType knightType;
-
-public:
+    inline BaseKnight() {};
+    inline BaseKnight(int a, int b, int c, int d, int e) : id(++knidcount), hp(a), maxhp(b), level(c), gil(d), antidote(e) {};
     static BaseKnight * create(int id, int maxhp, int level, int gil, int antidote, int phoenixdownI);
     string toString() const;
 };
 class Events;
 class ArmyKnights {
 public:
+    std::basic_string<BaseKnight> knights{};
     ArmyKnights (const string & file_armyknights);
     ~ArmyKnights();
     bool fight(BaseOpponent * opponent);
