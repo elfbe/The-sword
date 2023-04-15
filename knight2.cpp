@@ -83,5 +83,3 @@ void KnightAdventure::loadEvents(const string&){
 void KnightAdventure::run(){
     // armyKnights->printInfo();
 }
-
-/* * * END implementation of class KnightAdventure * * */

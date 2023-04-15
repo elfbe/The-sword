@@ -15,13 +15,9 @@ int main(int argc, char ** argv) {
         exit(1);
     }
     
-    // BEBGIN
-    KnightAdventure * knightAdventure = new KnightAdventure();
-    knightAdventure->loadArmyKnights(file_armyknights);
-    knightAdventure->loadEvents(file_events);
-    knightAdventure->run();
-
-    delete knightAdventure;
-
+    KnightAdventure knightAdventure;
+    knightAdventure.loadArmyKnights(file_armyknights);
+    knightAdventure.loadEvents(file_events);
+    knightAdventure.run();
     return 0;
 }
