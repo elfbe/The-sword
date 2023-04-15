@@ -1,56 +1,44 @@
 #include "knight2.h"
 
-string BaseKnight::toString() const{
-    string typeString[4] = { "PALADIN","LANCELOT","DRAGON","NORMAL" };
-    string s("");
-    s += "[Knight:id:"+to_string(id)
-        +",hp:"+to_string(hp)
-        +",maxhp:"+to_string(maxhp)
-        +",level:"+to_string(level)
-        +",gil:"+to_string(gil)
+std::string BaseKnight::toString() const{
+    static/*make it static*/ std::array<std::string,4>/*use C++ array*/ typeString = { "PALADIN","LANCELOT","DRAGON","NORMAL" };
+    std::string s;
+    s += "[Knight:id:"+std::to_string(id)
+        +",hp:"+std::to_string(hp)
+        +",maxhp:"+std::to_string(maxhp)
+        +",level:"+std::to_string(level)
+        +",gil:"+std::to_string(gil)
         +","+bag->toString()
-        +",knight_type:"+typeString[knightType]
+        +",knight_type:"+typeString[static_cast<size_t>/*cast it*/(knightType)]
         +"]";
     return s;
 }
-ArmyKnights::ArmyKnights(const string& file_armyknights){
+playerTeam::playerTeam(const std::string& file_armyknights){
 
 }
 
-int ArmyKnights::count() const{
+int playerTeam::count() const{
     return 0;
 }
-BaseKnight* ArmyKnights::lastKnight() const{
-    return 0;
-}
-bool ArmyKnights::hasPaladinShield() const{
-    return 0;
-}
-bool ArmyKnights::hasLancelotSpear() const{
-    return 0;
-}
-bool ArmyKnights::hasGuinevereHair() const{
-    return 0;
-}
-bool ArmyKnights::hasExcaliburSword() const{
+BaseKnight* playerTeam::lastKnight() const{
     return 0;
 }
 
-void ArmyKnights::printInfo() const{
-    cout<<"No. knights: "<<this->count();
+void playerTeam::printInfo() const{
+    std::cout<<"No. knights: "<<this->count();
     if(this->count()>0){
         BaseKnight* lknight = lastKnight(); // last knight
-        cout<<";"<<lknight->toString();
+        std::cout<<";"<<lknight->toString();
     }
-    cout<<";PaladinShield:"<<this->hasPaladinShield()
-        <<";LancelotSpear:"<<this->hasLancelotSpear()
-        <<";GuinevereHair:"<<this->hasGuinevereHair()
-        <<";ExcaliburSword:"<<this->hasExcaliburSword()
-        <<endl
-        <<string(50,'-')<<endl;
+    std::cout<< ";PaladinShield:"<<this->hasPaladinShield()
+             << ";LancelotSpear:"<<this->hasLancelotSpear()
+             << ";GuinevereHair:"<<this->hasGuinevereHair()
+             << ";ExcaliburSword:"<<this->hasExcaliburSword()
+             << std::endl
+             << std::string(50,'-')<<std::endl;
 }
-void ArmyKnights::printResult(bool win) const{
-    cout << (win?"WIN":"LOSE") << endl;
+void playerTeam::printResult(bool win) const{
+    std::cout << (win?"WIN":"LOSE") << std::endl;
 }
 KnightAdventure::KnightAdventure(){
     armyKnights = nullptr;
@@ -59,17 +47,17 @@ KnightAdventure::KnightAdventure(){
 KnightAdventure::~KnightAdventure(){
 
 }
-void KnightAdventure::loadArmyKnights(const string& file_armyknights){
-    ifstream(knights);
+void KnightAdventure::loadArmyKnights(const std::string& file_armyknights){
+    std::ifstream(knights);
     int numKnights;
-    knights.open(file_armyknights,ios::in);
+    knights.open(file_armyknights,std::ios::in);
     knights>>numKnights;
     knights.ignore();
 
-    string* knightinfo = new string[numKnights];
+    std::vector<std::string> knightinfo(numKnights);
     for(int i = 0; i<numKnights; i++){
         getline(knights,knightinfo[i]);
-        stringstream ss(knightinfo[i]);
+        std::stringstream ss(knightinfo[i]);
         int HP,level,phoenixdownI,gil,antidote;
         ss>>HP>>level>>phoenixdownI>>gil>>antidote;
         BaseKnight::create(1,HP,level,gil,antidote,phoenixdownI);
@@ -77,7 +65,7 @@ void KnightAdventure::loadArmyKnights(const string& file_armyknights){
     }
     knights.close();
 }
-void KnightAdventure::loadEvents(const string&){
+void KnightAdventure::loadEvents(const std::string&){
 
 }
 void KnightAdventure::run(){

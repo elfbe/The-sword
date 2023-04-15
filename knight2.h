@@ -1,81 +1,87 @@
-#ifndef __KNIGHT2_H__
-#define __KNIGHT2_H__
-
-#include "main.h"
-
+#pragma once 
+#include<iostream>
+#include<fstream>
+#include<sstream>
+#include<vector>
+#include<array>
+#include<string>
 // #define DEBUG
 
-enum ItemType {/* TODO: */};
+enum ItemType{/* TODO: */
+};
 
 class BaseItem;
-class BaseBag {
-public:
-    virtual bool insertFirst(BaseItem * item);
-    virtual BaseItem * get(ItemType itemType);
-    virtual string toString() const;
+class BaseBag{
+    public:
+    virtual bool insertFirst(BaseItem* item);
+    virtual BaseItem* get(ItemType itemType);
+    virtual std::string toString() const;
 };
 
 class BaseOpponent;
 
-enum KnightType { PALADIN = 0, LANCELOT, DRAGON, NORMAL };
-class BaseKnight {
-protected:
+enum class KnightType : size_t{
+    PALADIN=0u,LANCELOT=1u,DRAGON=2u,NORMAL=3u
+};
+class BaseKnight{
+    protected:
     int id;
     int hp;
     int maxhp;
     int level;
     int gil;
     int antidote;
-    BaseBag * bag;
+    BaseBag* bag;
     KnightType knightType;
 
-public:
-    static BaseKnight * create(int id, int maxhp, int level, int gil, int antidote, int phoenixdownI);
-    string toString() const;
+    public:
+    static BaseKnight* create(int id,int maxhp,int level,int gil,int antidote,int phoenixdownI);
+    std::string toString() const;
 };
 class Events;
-class ArmyKnights {
-public:
-    ArmyKnights (const string & file_armyknights);
-    ~ArmyKnights();
-    bool fight(BaseOpponent * opponent);
-    bool adventure (Events * events);
+class playerTeam{
+    bool psh;
+    bool lls;
+    bool gnh;
+    bool ecs;
+    public:
+    playerTeam(const std::string& file_armyknights);
+    bool fight(BaseOpponent* opponent);
+    bool adventure(Events* events);
     int count() const;
-    BaseKnight * lastKnight() const;
+    BaseKnight* lastKnight() const;
 
-    bool hasPaladinShield() const;
-    bool hasLancelotSpear() const;
-    bool hasGuinevereHair() const;
-    bool hasExcaliburSword() const;
+    bool hasPaladinShield() const{return psh;}
+    bool hasLancelotSpear() const{return lls;}
+    bool hasGuinevereHair() const{return gnh;}
+    bool hasExcaliburSword() const{return ecs;}
 
     void printInfo() const;
     void printResult(bool win) const;
 };
 
-class BaseItem {
-public:
-    virtual bool canUse ( BaseKnight * knight ) = 0;
-    virtual void use ( BaseKnight * knight ) = 0;
+class BaseItem{
+    public:
+    virtual bool canUse(BaseKnight* knight) = 0;
+    virtual void use(BaseKnight* knight) = 0;
 };
 
-class Events {
-public:
+class Events{
+    public:
     int count() const;
     int get(int i) const;
 };
 
-class KnightAdventure {
-private:
-    ArmyKnights * armyKnights;
-    Events * events;
+class KnightAdventure{
+    private:
+    std::vector<playerTeam> armyKnights;
+    std::vector<Events> events;
 
-public:
+    public:
     KnightAdventure();
-    ~KnightAdventure(); // TODO:
+    ~KnightAdventure();
 
-    void loadArmyKnights(const string &);
-    void loadEvents(const string &);
+    void loadArmyKnights(const std::string&);
+    void loadEvents(const std::string&);
     void run();
 };
-
-#endif // __KNIGHT2_H__

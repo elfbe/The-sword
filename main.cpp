@@ -1,5 +1,5 @@
 #include "knight2.h"
-
+#include"main.h"
 int main(int argc, char ** argv) {
     string file_armyknights, file_events;
     if (argc == 1) {
@@ -15,9 +15,13 @@ int main(int argc, char ** argv) {
         exit(1);
     }
     
-    KnightAdventure knightAdventure;
-    knightAdventure.loadArmyKnights(file_armyknights);
-    knightAdventure.loadEvents(file_events);
-    knightAdventure.run();
+    // BEBGIN
+    KnightAdventure * knightAdventure = new KnightAdventure();
+    knightAdventure->loadArmyKnights(file_armyknights);
+    knightAdventure->loadEvents(file_events);
+    knightAdventure->run();
+
+    delete knightAdventure;
+
     return 0;
 }
